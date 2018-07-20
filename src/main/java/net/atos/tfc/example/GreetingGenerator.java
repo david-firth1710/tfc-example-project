@@ -2,7 +2,7 @@ package net.atos.tfc.example;
 
 import static java.lang.String.format;
 
-public class GreetingGenerator
+public final class GreetingGenerator
 {
     public String generateGreeting()
     {
