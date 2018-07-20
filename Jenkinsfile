@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.5-jdk-8'
-            args '-v /var/local/maven:/var/maven'
+            args '-v /var/local/maven:/var/maven --network=host'
         }
     }
     options {
