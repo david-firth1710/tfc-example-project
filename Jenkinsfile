@@ -19,12 +19,6 @@ pipeline {
                 description: "Build a release from current commit.",
                 defaultValue: false)
     }
-    when {
-        allof {
-            branch "develop"
-            expression { params.RELEASE }
-        }
-    }
     stages {
         stage('Clean') {
             steps {
@@ -61,7 +55,10 @@ pipeline {
         }
         stage('Release') {
             when {
-                expression { params.RELEASE }
+                allof {
+                    branch "develop"
+                    expression { params.RELEASE }
+                }
             }
             steps {
                 sh 'git reset --hard'
