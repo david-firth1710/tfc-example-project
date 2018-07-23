@@ -44,8 +44,13 @@ pipeline {
         }
         stage('Publish'){
             steps {
-                sh 'mvn clean deploy -Dmaven.test.skip=true'
+                sh 'mvn clean deploy -Dmaven.test.skip=true -DskipITs'
                 archiveArtifacts '**/target/*.jar'
+            }
+        }
+        stage('Release') {
+            steps {
+                sh 'mvn release:prepare release:perform'
             }
         }
     }
