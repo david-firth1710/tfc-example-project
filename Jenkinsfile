@@ -51,6 +51,7 @@ pipeline {
         stage('Release') {
             steps {
                 sh 'git reset --hard'
+                sh 'git fetch origin'
                 sh 'mvn -B gitflow:release'
             }
         }
