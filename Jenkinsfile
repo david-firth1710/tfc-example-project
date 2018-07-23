@@ -62,7 +62,8 @@ pipeline {
             }
             steps {
                 sh 'git remote -v'
-                sh 'git fetch'
+                sh 'git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'
+                sh 'git fetch --all'
                 sh 'git branch -av'
                 sh 'mvn -B gitflow:release'
             }
