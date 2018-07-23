@@ -57,6 +57,7 @@ pipeline {
             when {
                 allOf {
                     branch "develop"
+                    expression { params.RELEASE }
                 }
             }
             steps {
