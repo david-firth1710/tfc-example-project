@@ -14,6 +14,17 @@ pipeline {
         MAVEN_OPTS = "-Duser.home=/var/maven ${env.JAVA_OPTS}"
         JAVA_TOOL_OPTIONS = "${env.JAVA_OPTS}"
     }
+    parameters {
+        booleanParam(name: "RELEASE",
+                description: "Build a release from current commit.",
+                defaultValue: false)
+    }
+    when {
+        allof {
+            branch "develop"
+            expression { params.RELEASE }
+        }
+    }
     stages {
         stage('Clean') {
             steps {
@@ -49,9 +60,11 @@ pipeline {
             }
         }
         stage('Release') {
+            when {
+                expression { params.RELEASE }
+            }
             steps {
                 sh 'git reset --hard'
-                sh 'git fetch origin'
                 sh 'mvn -B gitflow:release'
             }
         }
