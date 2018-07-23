@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.5-jdk-8'
-            args '-v /var/local/maven:/var/maven --network=host --env http_proxy="172.16.0.40:3128" --env https_proxy="172.16.0.40:3128"'
+            args '-v /var/local/maven:/var/maven --network=host'
         }
     }
     options {
@@ -13,6 +13,11 @@ pipeline {
         MAVEN_CONFIG = "/var/maven/.m2"
         MAVEN_OPTS = "-Duser.home=/var/maven ${env.JAVA_OPTS}"
         JAVA_TOOL_OPTIONS = "${env.JAVA_OPTS}"
+    }
+    parameters {
+        booleanParam(name: "RELEASE",
+                description: "Build a release from current commit.",
+                defaultValue: false)
     }
     stages {
         stage('Clean') {
@@ -49,7 +54,14 @@ pipeline {
             }
         }
         stage('Release') {
+            when {
+                allOf {
+                    branch "develop"
+                    expression { params.RELEASE }
+                }
+            }
             steps {
+                sh 'git reset --hard'
                 sh 'mvn -B gitflow:release'
             }
         }
