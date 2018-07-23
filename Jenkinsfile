@@ -57,11 +57,9 @@ pipeline {
             when {
                 allOf {
                     branch "develop"
-                    expression { params.RELEASE }
                 }
             }
             steps {
-                sh 'git reset --hard'
                 sh 'mvn -B gitflow:release'
             }
         }
