@@ -62,7 +62,6 @@ pipeline {
             }
             steps {
                 sh 'git remote -v'
-                sh 'git fetch'
                 sh 'git branch -av'
                 sh 'mvn -B gitflow:release'
             }
