@@ -50,7 +50,7 @@ pipeline {
         }
         stage('Release') {
             steps {
-                sh 'mvn gitflow:release-start gitflow:release-finish'
+                sh 'mvn -B gitflow:release'
             }
         }
     }
