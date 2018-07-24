@@ -13,6 +13,7 @@ pipeline {
         MAVEN_CONFIG = "/var/maven/.m2"
         MAVEN_OPTS = "-Duser.home=/var/maven ${env.JAVA_OPTS}"
         JAVA_TOOL_OPTIONS = "${env.JAVA_OPTS}"
+        GITHUB_ACCESS = credentials('TFC-BuildUser')
     }
     parameters {
         booleanParam(name: "RELEASE",
@@ -61,6 +62,7 @@ pipeline {
                 }
             }
             steps {
+                sh 'echo $GITHUB_ACCESS'
                 sh 'git remote -v'
                 sh "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
                 sh 'git fetch --all'
