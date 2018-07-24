@@ -48,6 +48,11 @@ pipeline {
             }
         }
         stage('Publish'){
+            when {
+                not {
+                    branch "master"
+                }
+            }
             steps {
                 sh 'mvn clean deploy -Dmaven.test.skip=true -DskipITs'
                 archiveArtifacts '**/target/*.jar'
