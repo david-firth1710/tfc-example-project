@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3.5-jdk-8'
-            args '-v /var/local/maven:/var/maven --network=host'
+            args '-v /var/local/maven:/var/maven --network=host --env http_proxy="172.16.0.40:3128" --env https_proxy="172.16.0.40:3128"'
         }
     }
     options {
@@ -13,6 +13,7 @@ pipeline {
         MAVEN_CONFIG = "/var/maven/.m2"
         MAVEN_OPTS = "-Duser.home=/var/maven ${env.JAVA_OPTS}"
         JAVA_TOOL_OPTIONS = "${env.JAVA_OPTS}"
+        GITHUB_ACCESS = credentials('71dae69a-cdf9-4cbc-8819-8c8be8f28c9b')
     }
     parameters {
         booleanParam(name: "RELEASE",
@@ -61,7 +62,13 @@ pipeline {
                 }
             }
             steps {
-                sh 'git reset --hard'
+                withCredentials([usernameColonPassword(credentialsId: '71dae69a-cdf9-4cbc-8819-8c8be8f28c9b', variable: 'USERPASS')]) {
+                    sh 'git remote set-url origin https://${USERPASS}@github.com/atos-tfc/tfc-example-project.git'
+                }
+                sh 'git remote -v'
+                sh "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
+                sh 'git fetch --all'
+                sh 'git branch -av'
                 sh 'mvn -B gitflow:release'
             }
         }
