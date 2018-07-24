@@ -13,7 +13,6 @@ pipeline {
         MAVEN_CONFIG = "/var/maven/.m2"
         MAVEN_OPTS = "-Duser.home=/var/maven ${env.JAVA_OPTS}"
         JAVA_TOOL_OPTIONS = "${env.JAVA_OPTS}"
-        GITHUB_ACCESS = credentials('71dae69a-cdf9-4cbc-8819-8c8be8f28c9b')
     }
     parameters {
         booleanParam(name: "RELEASE",
@@ -63,7 +62,8 @@ pipeline {
             }
             steps {
                 withCredentials([usernameColonPassword(credentialsId: '71dae69a-cdf9-4cbc-8819-8c8be8f28c9b', variable: 'USERPASS')]) {
-                    sh 'git remote set-url origin https://${USERPASS}@github.com/atos-tfc/tfc-example-project.git'
+                    def newUrl = build.environment.get("GIT_URL").replaceAll('https://', 'https://${USERPASS}@')
+                    sh 'git remote set-url origin ${newUrl}'
                 }
                 sh 'git remote -v'
                 sh "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
