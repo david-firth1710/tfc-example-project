@@ -10,7 +10,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr:'10'))
     }
     environment {
-        CREDENTIAL_URL = build.environment.get("GIT_URL").replaceAll('https://', 'https://${USERPASS}@')
         MAVEN_CONFIG = "/var/maven/.m2"
         MAVEN_OPTS = "-Duser.home=/var/maven ${env.JAVA_OPTS}"
         JAVA_TOOL_OPTIONS = "${env.JAVA_OPTS}"
@@ -63,6 +62,7 @@ pipeline {
             }
             steps {
                 withCredentials([usernameColonPassword(credentialsId: '71dae69a-cdf9-4cbc-8819-8c8be8f28c9b', variable: 'USERPASS')]) {
+                    CREDENTIAL_URL = build.environment.get("GIT_URL").replaceAll('https://', 'https://${USERPASS}@')
                     sh 'git remote set-url origin ${CREDENTIAL_URL}'
                 }
                 sh 'git remote -v'
