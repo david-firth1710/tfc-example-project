@@ -63,9 +63,8 @@ pipeline {
             }
             steps {
                 withCredentials([usernameColonPassword(credentialsId: '71dae69a-cdf9-4cbc-8819-8c8be8f28c9b', variable: 'USERPASS')]) {
-                    sh 'git remote add origin https://${USERPASS}@github.com/atos-tfc/tfc-example-project.git'
+                    sh 'git remote set-url origin https://${USERPASS}@github.com/atos-tfc/tfc-example-project.git'
                 }
-                sh 'echo $GITHUB_ACCESS'
                 sh 'git remote -v'
                 sh "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
                 sh 'git fetch --all'
