@@ -37,8 +37,24 @@ pipeline {
             }
         }
         stage('Test'){
+            when {
+                not {
+                    branch "master"
+                }
+            }
             steps {
-                sh 'mvn install -P coverage'
+                sh 'mvn install -P coverage -DskipITs'
+                junit '**/target/surefire-reports/*.xml'
+            }
+        }
+        stage('Mutation Test'){
+            when {
+                not {
+                    branch "master"
+                }
+            }
+            steps {
+                sh 'mvn org.pitest:pitest-maven:mutationCoverage'
                 junit '**/target/surefire-reports/*.xml'
             }
         }
