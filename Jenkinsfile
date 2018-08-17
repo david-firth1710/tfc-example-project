@@ -74,6 +74,9 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: '71dae69a-cdf9-4cbc-8819-8c8be8f28c9b', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh 'git config -l'
+                        sh 'git remote -v'
+                        sh 'git branch -avv'
                         sh 'mvn --batch-mode release:prepare release:perform -Dusername=${GIT_USERNAME} -Dpassword=${GIT_PASSWORD} -Darguments="-DskipTests -DskipITs"'
                     }
                 }
