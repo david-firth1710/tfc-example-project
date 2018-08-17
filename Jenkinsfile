@@ -73,17 +73,10 @@ pipeline {
             }
             steps {
                 script {
-                    withCredentials([usernameColonPassword(credentialsId: '71dae69a-cdf9-4cbc-8819-8c8be8f28c9b', variable: 'USERPASS')]) {
-                        CREDENTIAL_URL = env.GIT_URL.replaceAll('https://', "https://${USERPASS}@")
-                        echo "CREDENTIAL_URL: ${CREDENTIAL_URL}"
-                        sh "git remote set-url origin ${CREDENTIAL_URL}"
+                    withCredentials([usernamePassword(credentialsId: '71dae69a-cdf9-4cbc-8819-8c8be8f28c9b', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+                        sh 'mvn --batch-mode release:prepare release:perform -Dusername=${GIT_USERNAME} -Dpassword=${GIT_PASSWORD} -Darguments="-DskipTests -DskipITs"'
                     }
                 }
-                sh 'git remote -v'
-                sh "git config remote.origin.fetch '+refs/heads/*:refs/remotes/origin/*'"
-                sh 'git fetch --all'
-                sh 'git branch -av'
-                sh 'mvn -B gitflow:release'
             }
         }
     }
