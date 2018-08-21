@@ -9,7 +9,7 @@
         <relativePath />
     </parent>
 
-    <groupId>net.ats.tfc</groupId>
+    <groupId>net.atos.tfc</groupId>
     <artifactId>tfc-example-project</artifactId>
     <version>1.0.10-SNAPSHOT</version>
 
