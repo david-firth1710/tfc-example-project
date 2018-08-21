@@ -11,11 +11,11 @@
 
     <groupId>net.ats.tfc</groupId>
     <artifactId>tfc-example-project</artifactId>
-    <version>1.0.9-SNAPSHOT</version>
+    <version>1.0.9</version>
 
     <scm>
         <connection>scm:git:https://github.com/atos-tfc/tfc-example-project.git</connection>
-        <tag>HEAD</tag>
+        <tag>tfc-example-project-1.0.9</tag>
     </scm>
 
     <dependencies>
